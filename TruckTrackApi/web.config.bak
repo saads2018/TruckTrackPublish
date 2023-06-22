@@ -7,7 +7,7 @@
     </security>
       <handlers>
         <add name="aspNetCore" path="*" verb="*" modules="AspNetCoreModuleV2" resourceType="Unspecified" />
-		<add name="SignalR" path="/DatabaseChangesHub" verb="*" type="Microsoft.AspNetCore.SignalR" />
+		<add name="SignalR" path="/signalr" verb="*" type="Microsoft.AspNetCore.SignalR" />
       </handlers>
       <aspNetCore processPath="dotnet" arguments=".\TruckTrackAPIs.dll" stdoutLogEnabled="false" stdoutLogFile=".\logs\stdout" hostingModel="inprocess" />
     </system.webServer>

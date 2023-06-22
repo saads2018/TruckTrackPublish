@@ -300,6 +300,10 @@ function dragElement(elmnt) {
   }
 }
 
+function setDriver(id, driver, username) {
+    document.getElementById(id).value = driver + ":" + username;
+}
+
 function setValue(id, value) {
     document.getElementById(id).value = value;
     document.getElementById(id).innerText = value;

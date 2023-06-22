@@ -25,6 +25,6 @@
     "Scopes": "user.read"
   },
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost; Port=5432;  Database=truckTrackDb; User ID=postgres;Password=postgresql1234;"
+    "DefaultConnection": "Server=localhost; Port=5432;  Database=truckTrackDb; User ID=postgres;Password=flatNO102@;"
   }
 }
