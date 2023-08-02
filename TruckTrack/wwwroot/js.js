@@ -162,3 +162,112 @@ function getAddressValue() {
 function setAddress(address) {
     document.getElementById("address").value = address;
 }
+
+let imgSave = "";
+function showPopUp(img) {
+    imgSave = img;
+    document.getElementById("popup").style.display = "block";
+    document.getElementById("invoiceImage").setAttribute('src', img);
+    document.getElementById("popup-dialog").addEventListener("click", openInNewTab);
+}
+
+function showPopUpMap(coordinates, times, speeds) {
+    initializeMap(coordinates, times, speeds);
+    document.getElementById("map").style.visibility = "visible";
+    document.getElementById("popup1").style.display = "block";
+}
+
+function openInNewTab() {
+    window.open(imgSave, "_blank");
+}
+
+function addBackOut() {
+    document.addEventListener('click', function (event) {
+        var divCont = document.getElementById('popup');
+        var divCont1 = document.getElementById('popup1');
+        var div = document.getElementById('popup-dialog');
+        var div1 = document.getElementById('popup-dialog1');
+        var div2 = document.getElementById('map');
+
+        var targetElement = event.target;
+
+        // Check if the clicked element is a child of the div
+        if ((divCont.style.display == "block" && !div.contains(targetElement)) || (divCont1.style.display == "block" && !div1.contains(targetElement) && !div2.contains(targetElement))) {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("popup1").style.display = "none";
+            document.getElementById("map").style.visibility = "hidden";
+            document.getElementById("invoiceLabel").style.display = "block";
+            document.getElementById("invoiceImage").style.display = "block";
+            document.getElementById("popup-dialog").removeEventListener("click", openInNewTab);
+        }
+    });
+}
+
+class Coordindate {
+    constructor(X, Y) {
+        this.X = X;
+        this.Y = Y;
+    }
+}
+
+window.initializeMap = (coordinates, times, speeds) => {
+    // Create the map
+    
+    var maps = document.createElement("div");
+    maps.id = "map";
+    maps.style = "visibility:hidden; width:1252px; z-index:9999; height: 660px; position:fixed; top:5%; left:9%;"
+
+    if (document.getElementById("map") != null) {
+        document.getElementById("map").remove();
+    }
+
+    document.body.appendChild(maps);
+
+    var map = L.map('map').setView([47.618591, -122.350553], 13);
+    // Add the tile layer (you can use other tile providers as well)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Retrieve the GPS coordinates from your C# code
+    // Create an array to hold the polyline points
+    var polylinePoints = [];
+
+    if (coordinates != null) {
+        // Add the polyline points to the array
+        for (var i = 0; i < coordinates.length; i++) {
+            var coordinate = coordinates[i];
+            var time = times[i];
+            var speed = speeds[i];
+            var marker = L.marker([coordinate.x, coordinate.y]).addTo(map);
+            marker.bindPopup(`Speed: ${speed} km/h<br>Time: ${time}`);
+            var latLng = L.latLng(coordinate.x, coordinate.y);
+            polylinePoints.push(latLng);
+        }
+
+        // Create the polyline with the coordinates
+        var polyline = L.polyline(polylinePoints, { color: 'red' }).addTo(map);
+
+        // Fit the map to the polyline bounds
+        map.fitBounds(polyline.getBounds());
+    }
+
+    // Enable the Leaflet.Draw plugin for user interaction (optional)
+    var drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+    var drawControl = new L.Control.Draw({
+        edit: {
+            featureGroup: drawnItems
+        },
+        draw: {
+            polyline: false,
+            polygon: false,
+            circle: false,
+            rectangle: false,
+            marker: false
+        }
+    });
+    map.addControl(drawControl);
+}
+

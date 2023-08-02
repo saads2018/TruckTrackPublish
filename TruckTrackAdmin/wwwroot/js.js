@@ -308,3 +308,61 @@ function setValue(id, value) {
     document.getElementById(id).value = value;
     document.getElementById(id).innerText = value;
 }
+
+
+class Coordindate {
+    constructor(latitude, longitude) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+}
+
+
+window.initializeMap = () => {
+    // Create the map
+    var map = L.map('map').setView([0, 0], 13);
+
+    // Add the tile layer (you can use other tile providers as well)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Retrieve the GPS coordinates from your C# code
+    const coordinates = [new Coordindate(30.200862, 71.425972), new Coordindate(30.202884, 71.426678), new Coordindate(30.204423, 71.427075), new Coordindate(30.204395, 71.428839)];
+
+    // Create an array to hold the polyline points
+    var polylinePoints = [];
+
+    // Add the polyline points to the array
+    for (var i = 0; i < coordinates.length; i++) {
+        var coordinate = coordinates[i];
+        var marker = L.marker([coordinate.latitude, coordinate.longitude]).addTo(map);
+        marker.bindPopup(`Speed: 10 km/h<br>Time: 10:03`);
+        var latLng = L.latLng(coordinate.latitude, coordinate.longitude);
+        polylinePoints.push(latLng);
+    }
+
+    // Create the polyline with the coordinates
+    var polyline = L.polyline(polylinePoints, { color: 'red' }).addTo(map);
+
+    // Fit the map to the polyline bounds
+    map.fitBounds(polyline.getBounds());
+
+    // Enable the Leaflet.Draw plugin for user interaction (optional)
+    var drawnItems = new L.FeatureGroup();
+    map.addLayer(drawnItems);
+
+    var drawControl = new L.Control.Draw({
+        edit: {
+            featureGroup: drawnItems
+        },
+        draw: {
+            polyline: false,
+            polygon: false,
+            circle: false,
+            rectangle: false,
+            marker: false
+        }
+    });
+    map.addControl(drawControl);
+}
