@@ -163,12 +163,24 @@ function setAddress(address) {
     document.getElementById("address").value = address;
 }
 
-let imgSave = "";
+window.addEventListener('scroll', handleScroll);
+
+function handleScroll() {
+    if (window.scrollY > 0) {
+        document.getElementById("backPage").style.display = "none";
+    } else {
+        document.getElementById("backPage").style.display = "block";
+    }
+}
+
 function showPopUp(img) {
-    imgSave = img;
+    if (img == "") {
+        img = "https://howfix.net/wp-content/uploads/2018/02/sIaRmaFSMfrw8QJIBAa8mA-article.png";
+    }
+
     document.getElementById("popup").style.display = "block";
     document.getElementById("invoiceImage").setAttribute('src', img);
-    document.getElementById("popup-dialog").addEventListener("click", openInNewTab);
+    document.getElementById("invoiceImage").value = img;
 }
 
 function showPopUpMap(coordinates, times, speeds) {
@@ -177,9 +189,14 @@ function showPopUpMap(coordinates, times, speeds) {
     document.getElementById("popup1").style.display = "block";
 }
 
-function openInNewTab() {
-    window.open(imgSave, "_blank");
+function openInNewTab(value) {
+    if (value == "") {
+        value = "https://howfix.net/wp-content/uploads/2018/02/sIaRmaFSMfrw8QJIBAa8mA-article.png";
+    }
+
+    window.open(value, "_self");
 }
+
 
 function addBackOut() {
     document.addEventListener('click', function (event) {
@@ -198,7 +215,6 @@ function addBackOut() {
             document.getElementById("map").style.visibility = "hidden";
             document.getElementById("invoiceLabel").style.display = "block";
             document.getElementById("invoiceImage").style.display = "block";
-            document.getElementById("popup-dialog").removeEventListener("click", openInNewTab);
         }
     });
 }

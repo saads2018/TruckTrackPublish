@@ -52,6 +52,11 @@ function getRoutesList() {
     return list;
 }
 
+function openNewTab(value) {
+    var url = value; // Replace with your desired URL
+    window.open(url, "_blank");
+}
+
 function getType() {
     return document.getElementById("type").value;
 }
