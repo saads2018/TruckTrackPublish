@@ -227,6 +227,10 @@ function loaderVisibility(hide) {
     document.getElementById("load").style.display = hide;
 }
 
+function loaderVisibility1(hide) {
+    document.getElementById("load1").style.display = hide;
+}
+
 window.dragEndCallback = (elementId,dotNetRef) => {
     var element = document.getElementById(elementId);
     element.addEventListener("dragend", () => {

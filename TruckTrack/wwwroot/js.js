@@ -173,6 +173,9 @@ function handleScroll() {
     }
 }
 
+function reload() {
+    window.location.reload();
+}
 function showPopUp(img) {
     if (img == "") {
         img = "https://howfix.net/wp-content/uploads/2018/02/sIaRmaFSMfrw8QJIBAa8mA-article.png";
